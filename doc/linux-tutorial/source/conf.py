@@ -37,9 +37,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Parallella HDMI - report'
-basic_filename = u'parallella-hdmi--report'
-authors = u'Antmicro'
+project = u'Parallella Ubuntu - quickstart guide'
+basic_filename = u'parallella-ubuntu--quickstart-guide'
+authors = u'Antmicro Ltd'
 copyright = authors + u', 2013'
 
 # The version info for the project you're documenting, acts as replacement for
