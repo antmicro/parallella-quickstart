@@ -1,5 +1,5 @@
-Parallella HDMI - report
-========================
+Parallella Linux tutorial
+=========================
 
 .. toctree::
    :maxdepth: 2
