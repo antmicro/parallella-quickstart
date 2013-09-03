@@ -1,5 +1,5 @@
-Parallella Linux tutorial
-=========================
+Parallella Linux - quickstart guide
+===================================
 
 .. toctree::
    :maxdepth: 2

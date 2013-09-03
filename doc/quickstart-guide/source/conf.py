@@ -37,8 +37,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Parallella Ubuntu - quickstart guide'
-basic_filename = u'parallella-ubuntu--quickstart-guide'
+project = u'Parallella Linux - quickstart guide'
+basic_filename = u'parallella-linux--quickstart-guide'
 authors = u'Antmicro Ltd'
 copyright = authors + u', 2013'
 
