@@ -12,6 +12,7 @@ Version information
 
    Author,Content,Date,Version
    Michael Gielda,Initial version,2013-08-26,0.1.0
+   Karol Gugala,Software preparation guide,2013-10-01,0.2.0
 
 Procedure
 =========
