@@ -1,18 +1,28 @@
 Software build and run guide
 ============================
 
-This section describes build and run procedure ...
+This section provides information on acquiring, configuring, building and running software on Prallella board. 
 
 Prerequisites
-=============
+-------------
+
+This section lists software and tools required in the next steps of building and running Linux on Parallella board. In the following subsections is is assumed that every requisite described in this part is met. Furthermore, for every required package, place from where it can be obtainded is provided.
 
 .. rubric:: Xilinx Tools
 
-Download and install tools from http://www.xilinx.com.
+Tools provided by Xilinx required by some parts of this section are as follows:
 
-.. rubric::  Arm toolchain  
+#. Xilinx Software Developement Kit (SDK) is required for generating and building First Stage Boot Loader (FSBL). If it is not required for your project to change hardware configuration, thus replacement of FSBL tou do not need this tool. 
 
-Xilinx tools comes with 'arm-xilinx-eabi-' and 'arm-xilinx-linux-' toolchains. Both of them can be used in next steps. Other Arm toolchain (e.g. CodeSourcery edition) can also be used in the next steps. 
+#. Xilinx Microprocessor Debbuger (XMD) is required to connect with Zynq chip via JTAG. If you do not plan do load or debug software this way you do not need this tool.
+
+TODO: WRITE ABOUT OPENOCD!!!!
+
+If any of above mentioned cases applies to your project you need to download and install Xilinx ISE Design Suite from http://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/design-tools.html. As instalation type select "Embedded edition". Note that this software isn't free and needs extra licensing.  
+
+.. rubric::  ARM toolchain  
+
+Xilinx tools comes with 'arm-xilinx-eabi-' and 'arm-xilinx-linux-' toolchains. Both of them can be used in next steps. If youn do not need or don't want to use Xilinx tools any other Arm toolchain (e.g. CodeSourcery edition availiabe here: http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/) can also be used in the next steps. 
 
 .. rubric:: U-Boot tools
 
@@ -24,8 +34,10 @@ On Debian/Ubuntu distributions this software can be obtained with:
 
    apt-get install u-boot-tools
 
+TODO: OTHER DISTROS
+
 Getting the source
-==================
+------------------
 
 .. rubric:: FSBL
 
@@ -54,7 +66,7 @@ Official Linux source code for parallella board can be found in: https://github.
    git checkout parallella-linux3.9        
 
 Building
-========
+--------
 
 .. rubric:: First Stage Bootloader (FSBL)
 
@@ -95,11 +107,14 @@ Linux build procedure:
    #build kernel image 
    make [-jX] uImage
 
+Precompiled binaries
+--------------------
+
 Deployment
-==========
+----------
 
 JTAG
-----
+++++
 
 #. Run xmd
 
@@ -131,7 +146,7 @@ JTAG
 
    
 Program Flash
-------------- 
++++++++++++++ 
 
 Reference to or rewrite parallella guide ...
 
