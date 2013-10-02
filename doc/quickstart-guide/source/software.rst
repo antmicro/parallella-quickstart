@@ -1,12 +1,14 @@
 Software build and run guide
 ============================
 
-This section provides information on acquiring, configuring, building and running software on Parallella board. 
+This section provides information on acquiring, configuring, building and running software on the Parallella board. 
+
+.. _prerequisites:
 
 Prerequisites
 -------------
 
-This section lists software and tools required in the next steps of building and running Linux on Parallella board. In the following subsections is is assumed that every requisite described in this part is met.
+This section lists software and tools required in the next steps of building and running Linux on the Parallella board. In the following subsections is is assumed that every requisite described in this part is met.
 Furthermore, for every required package, place from where it can be obtained is provided.
 
 .. rubric:: Xilinx Tools
@@ -17,14 +19,14 @@ Tools provided by Xilinx required by some parts of this section are as follows:
 
 #. Xilinx Microprocessor Debugger (XMD) is required to connect with Zynq chip via JTAG. If you do not plan do load or debug software this way you do not need this tool.
 
-#. Bootgen is required for preparing bootable image for Zynq chip.
+#. Bootgen is required for preparing bootable image for Zynq chip. If you do not plan to change default bootloader you do not need this tool.
 
 TODO: WRITE ABOUT OPENOCD!!!!
 
 If any of above mentioned cases applies to your project you need to download and install Xilinx ISE Design Suite from http://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/design-tools.html. As installation type select "Embedded edition". Note that this software isn't free and needs extra licensing.  
 
 .. rubric::  ARM toolchain  
-
+ 
 Xilinx tools comes with 'arm-xilinx-eabi-' and 'arm-xilinx-linux-' toolchains. Both of them can be used in next steps. If you do not need or don't want to use Xilinx tools any other Arm toolchain (e.g. CodeSourcery lite edition available here: http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/) can also be used in the next steps. 
 
 .. rubric:: U-Boot tools
@@ -54,7 +56,7 @@ More info about creating and building it can be found (TODO: reference to Xilinx
 
 .. rubric:: U-Boot
    
-Official U-Boot source code for Parallella board can be found at: https://github.com/parallella/parallella-uboot
+Official U-Boot source code for the Parallella board can be found at: https://github.com/parallella/parallella-uboot
 
 .. code-block:: bash 
 
@@ -65,7 +67,7 @@ Official U-Boot source code for Parallella board can be found at: https://github
 
 .. rubric:: Linux 
 
-Official Linux source code for Parallella board can be found at: https://github.com/antmicro/linux-parallella
+Official Linux source code for the Parallella board can be found at: https://github.com/antmicro/linux-parallella
 
 .. code-block:: bash 
 
@@ -125,7 +127,8 @@ Linux build procedure:
 Preparing Zynq boot image
 -------------------------
 
-This section describes preparation of Zynq boot image that can be write into onboard flash memory of Parallella board. If you do not plan to change bootloader you can skip this section. Bootgen tool requires .bif input file describing boot image layout. An example of bif file is listed below:
+This section describes preparation of Zynq boot image that can be write into onboard flash memory of the Parallella board. If you do not plan to change bootloader you can skip this section. 
+Zynq boot image can be created with bootgen tool (see :ref:`prerequisites`). Bootgen tool requires .bif input file describing boot image layout. An example of bif file is listed below:
 
 .. code-block:: bif
 
@@ -141,7 +144,7 @@ With this bif configuration simple boot image containing only first and second s
 
    bootgen -image /path/to/image.bif -o i parallella.bin
 
-Result file ("parallella.bin") is bootable image that can be program into Parallella onboard flash memory. More information about using bootgen and creating Zynq boot images can be found in `Zynq-7000 All Programmable SoC Software Developers Guide <http://www.xilinx.com/support/documentation/user_guides/ug821-zynq-7000-swdev.pdf>`_.
+Result file ("parallella.bin") is bootable image that can be program into the Parallella onboard flash memory. More information about using bootgen and creating Zynq boot images can be found in `Zynq-7000 All Programmable SoC Software Developers Guide <http://www.xilinx.com/support/documentation/user_guides/ug821-zynq-7000-swdev.pdf>`_.
 
 .. _binaries:
 
@@ -151,6 +154,7 @@ Precompiled binaries
 TODO: Reference binaries repository
 
 Repository file list:
+
 * fsbl.elf - compiled First Stage Boot Loader
 * u-boot.elf - compiled U-Boot 
 * uImage - Linux kernel image (u-boot loadable format)
@@ -161,7 +165,7 @@ Repository file list:
 Bootloader deployment
 ---------------------
 
-This section describes deployment procedure of previously compiled or downloaded bootloaders binaries. There are two ways of getting run new bootloader software on Parallella board:
+This section describes deployment procedure of previously compiled or downloaded bootloaders binaries. There are two ways of getting run new bootloader software on the Parallella board:
 
 #. Program flash with new Zynq boot image file see :ref:`flashing`.
 #. Download and run bootloader via JTAG connection see :ref:`jtag`.
@@ -268,4 +272,4 @@ Booting from SD card / USB drive
 
 Copy uImage, parallella.bit.bin and devicetree.dtb files onto first partition of SD card (FAT formatted), insert card into the board and power up it. Unpack Linux root file system onto USB drive or second partition of SD card (ext formatted).
 
-.. note:: Remember of setting proper boot device address in bootargs (/dev/sdaX for USB drive boot or /dev/mmcblk0pX for SD card) 
+.. note:: Remember of setting proper boot device in the Linux kernel bootargs (/dev/sdaX for USB drive boot or /dev/mmcblk0pX for SD card) 
