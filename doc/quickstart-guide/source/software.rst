@@ -8,7 +8,7 @@ This section provides information on acquiring, configuring, building and runnin
 Prerequisites
 -------------
 
-This section lists software and tools required in the next steps of building and running Linux on the Parallella board. In the following subsections is is assumed that every requisite described in this part is met.
+This section lists software and tools required in the next steps of building and running Linux on the Parallella board. In the following subsections is assumed that every requisite described in this part is met.
 Furthermore, for every required package, place from where it can be obtained is provided.
 
 .. rubric:: Xilinx Tools
@@ -179,7 +179,9 @@ JTAG
 
 .. note:: JTAG deploy requires use of Xilinx Platform Cable to connect to the Parallella board. 
 
-#. Run xmd
+JTAG deployment of software allows you running new software on the Parallella board without reflashing it, or recover it after flashing with improper boot image. 
+
+#. First step of JTAG deploy procedure is running Xilinx Microprocessor Debugger tool. It is able to connect to Zynq CPU and provides gdb server. Moreover using this tool you are able to program Zynq chip with new configuration file, but it isn't always necessary (if not "fpga" command in following procedure can be skipped). Important step of setting JTAG connection is proper configuration of Zynq chip (especially when it was flashed with improper Boot image). This can be done with running tcl procedures from ps7_init.tcl file (TODO: ref to repository). Stub.tcl script sets Zynq CPU into debug mode. 
 
    .. code-block:: tcl
 
@@ -188,17 +190,17 @@ JTAG
       source /path/to/your/ps7_init.tcl
       ps7_init
       init_user
-      source stub.tcl
+      source /path/to/your/stub.tcl
       target 64
 
-#. Continue in xmd 
+#. After configuring Zynq chip, software application (e.g. U-Boot) has to be load into onto it. This can be done either with xmd:
 
    .. code-block:: tcl
 
       dow </path/to/yours/>u-boot.elf
       con
      
-#. or Run gdb 
+   or via gdb:
 
    .. code-block:: gdb
 
@@ -214,7 +216,7 @@ Program Flash
 
 .. warning:: Reprogramming flash with incompatible Zynq boot image may result in inability to use the Parallella board. Moreover, during flashing, stable power supply must be assured. 
 
-.. note:: If board was programmed with wrong Boot image or there was other problem during flashing it still can be bring up using JTAG procedure (see :ref:`jtag`).
+.. note:: If board was programmed with improper Boot image or there was other problem during flashing it still can be bring up using JTAG procedure (see :ref:`jtag`).
 
 U-Boot delivered with the Parallella board can be used for re-flashing the board. Binary available from repository (:ref:`binaries`) or build (:ref:`build`) from github source (:ref:`source`) has also this functionality. If you changed default bootloader and it do not provide this feature you can still run default official Parallella U-Boot via JTAG (:ref:`jtag`) or by loading it with your current bootloader. 
 
@@ -265,7 +267,7 @@ To re-flash the Parallella board using official U-Boot follow these steps:
 Booting Linux
 =============
 
-This section discuss few (of many possible) ways of booting Linux on the Parallella board. If you are interested in general boot procedure of Zynq based device refer to `Zynq-7000 All Pr    ogrammable SoC Software Developers Guide <http://www.xilinx.com/support/documentation/user_guides/ug821-zynq-7000-swdev.pdf>`_.
+This section discusses few (of many possible) ways of booting Linux on the Parallella board. If you are interested in general boot procedure of Zynq based device refer to `Zynq-7000 All Programmable SoC Software Developers Guide <http://www.xilinx.com/support/documentation/user_guides/ug821-zynq-7000-swdev.pdf>`_.
 
 Booting from SD card / USB drive
 --------------------------------
@@ -273,3 +275,16 @@ Booting from SD card / USB drive
 Copy uImage, parallella.bit.bin and devicetree.dtb files onto first partition of SD card (FAT formatted), insert card into the board and power up it. Unpack Linux root file system onto USB drive or second partition of SD card (ext formatted).
 
 .. note:: Remember of setting proper boot device in the Linux kernel bootargs (/dev/sdaX for USB drive boot or /dev/mmcblk0pX for SD card) 
+
+Default Boot sequence
++++++++++++++++++++++
+
+Default Boot sequence on the Parallella board is as follows:
+
+#. After Power On internal Zynq BootROM finds boot image in onboard flash, copies FSBL from if into the On Chip RAM memory and run it.
+#. FSBL finds finds boot image in onboard flash, copies U-Boot from it into RAM memory and run it.
+#. U-Boot searches first (FAT formated) partition on SD card for Linux kernel image (uImage), devicetree (devicetree.dtb) and Zynq configuration (parallella.bit.bin). If found they are copied int RAM memory.
+#. U-Boot configures Zynq chip, and boot Linux kernel passing devicetree to it.
+#. Linux kernel boots into rootfs according to bootargs passed in devicetree.
+
+ 
