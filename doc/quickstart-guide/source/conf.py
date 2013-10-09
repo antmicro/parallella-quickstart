@@ -90,7 +90,7 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'antmicro-sphinx'
+html_theme = 'parallella-sphinx'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -109,7 +109,7 @@ html_title = project
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = 'antmicro-sphinx/logo-200.png'
+html_logo = 'parallella-sphinx/logo-html.png'
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
@@ -183,7 +183,7 @@ latex_documents = [
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
-latex_logo = 'antmicro-sphinx/logo-400.png'
+latex_logo = 'parallella-sphinx/logo-latex.png'
 
 # For "manual" documents, if this is true, then toplevel headings are parts,
 # not chapters.
@@ -214,12 +214,15 @@ man_pages = [
      [authors], 1)
 ]
 
-latex_additional_files = ['antmicro-sphinx/antmicro.sty','antmicro-sphinx/logo-400.png']
+latex_additional_files = ['parallella-sphinx/parallella.sty','parallella-sphinx/logo-latex.png']
 
 latex_elements = {
     'fontpkg': '\\usepackage{palatino}',
-    'preamble': r'''\usepackage{antmicro}''',
-    'maketitle': r'''\renewcommand{\releasename}{}\maketitle''',
+    'preamble': r'''\usepackage{parallella}''',
+    'maketitle': r'''
+    \renewcommand{\releasename}{}
+    \renewcommand{\sphinxlogo}{\includegraphics[height=80px]{logo-latex.png}\par}
+    \maketitle''',
     'classoptions':',openany,oneside',
     'babel': '\\usepackage[english]{babel}' 
 }
