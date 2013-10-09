@@ -4,6 +4,6 @@
 .. toctree::
    :maxdepth: 2
 
-   main
+   introduction
    hardware
    software
