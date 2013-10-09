@@ -5,5 +5,6 @@
    :maxdepth: 2
 
    introduction
-   hardware
-   software
+   fpga
+   bsp
+   usage
