@@ -16,6 +16,8 @@ If you do want to change the software/fpga stack you are running, you will also 
 Xilinx tools
 ------------
 
+#. PlanAhead is required to view and reimplement exemplary project. Version used for creating exemplary project is 14.4, thus at least this version (or newer) is required to work with. If you do not plan to build your own hardware project you do not need this tool. 
+
 #. Xilinx Software Development Kit (SDK) is required for generating and building the First Stage Boot Loader (FSBL). If you do not want to make any changes to the haconfiguration (which replacement of FSBL you do not need this tool. 
 
 #. Xilinx Microprocessor Debugger (XMD) is required to connect with the Zynq CPU via JTAG. If you do not plan do load or debug software this way you do not need this tool.

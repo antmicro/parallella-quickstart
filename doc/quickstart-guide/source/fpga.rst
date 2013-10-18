@@ -1,27 +1,29 @@
 Building the FPGA bitstream and FSBL
 ====================================
 
-This section describes preparation of the hardware project. It is basing on 
+This section describes preparation of the hardware project. It is basing on exemplary project containing Processing System (PS) configuration and its connection to Programmable Logic(PL). Epiphany link and HDMI IP cores are placed in PL and connected with PS via AXI bus. See following subsection for details. 
 
 Prerequisites
 -------------
 
-planAhead - tool required to view and reimplement exemplary project. It is part of Xilinx ISE Design suite :ref:`xilinx`. Version used for creating exemplary project is 14.4, thus at least this version (or newer) is required to work with. 
+To view or modify exemplary project Xilinx PlanAhead (version 14.4 or newer) is required. See :ref:`xilinx` for details.
 
 Project
 -------
 
-Whole project was implemented in Verilog using planAhead software (version 14.4). Project can be divided into two parts: 
+Whole project was implemented in Verilog (top level and Epiphany link) and VHDL (HDMI IP core) using planAhead software (version 14.4). Project can be divided into two main parts: 
 
-#. CPU embedded project (containing HDMI IP core)
+#. CPU embedded project (containing PS configuration and HDMI IP core)
 #. Epiphany link (providing interface between CPU and Epiphany chip) 
+
+Both parts are instantiated in top level file (parallella_7020_top.v). 
 
 .. _ready_to_use:
 
 Project structure
 -----------------
 
-#. Parallella_top.v - Top file 
+#. Parallella__7020_top.v - Top file 
 #. Parallella.v - Epiphany link
 #. System_stub.v - CPU embedded project wrapper  
 
@@ -44,14 +46,26 @@ Cortex A9 configuration
 
 Cortex-A9 Peripherals and connections:
 
-#. Uart
-#. QSPI
-#. SD
-#. USB
-#. I2C
-#. Ethernet
-#. Master AXI interconnect 
-#. High performance AXI slave interconnect 
+.. csv-table::
+   :header-rows: 1
+
+   Peripheral, connection
+   UART1, MIO 8..9
+   QSPI, MIO 1..6
+   SD1, MIO 10..15
+   USB0, MIO 28..39
+   USB1, MIO 40..51
+   I2C0, EMIO
+   Enet0, MIO 16..27
+
+Note that I2C0 peripheral is connected to EMIO IO controller, thus attached to the PL part of the Zynq chip. The only purpose of doing so is to be able to route this interface through PL to desired chip pins. To do so signals from this interface (SCL and SDA pins) must be set as external ports in the Embedded Processor project. 
+
+In order to connect Epiphany link to the CPU it is required to derive AXI bus interface outside the Embedded processor project. To do so following interfaces has to be enabled and set as external ports:
+
+#. Master AXI interconnect (M_AXI_GP1)
+#. High performance AXI slave interconnect (S_AXI_HP1)
+
+For audio data transfer it is required to enable DMA (DMA0) controller and connect it to the axi_spdif_tx peripheral in Progammable Logic.
 
 .. note:: Note that CPU configuration isn't written to bitstream, thus Processing System is not configured during bitstream download process. It can be only done with software - generally with :ref:`FSBL`.
 
@@ -92,7 +106,14 @@ Programmable Logic Configuration
 HDMI support
 ++++++++++++
 
-HDMI support is provided by IP core from Analog Devices (link to github). 
+HDMI support is provided by IP core from Analog Devices (`Analog Devices GitHub <https://github.com/analogdevicesinc/fpgahdl_xilinx>`_). IP cores needed for HDMI support are located in cf_lib folder. Peripherals used in the Parallella Exemplary project, their purpose and connections are listed below.
+ 
+#. axi_clkgen (v1.00a) - programmable reference clock for HDMI transmitter. It is connected to main AXI bus and provides reference clock for axi_hdmi_tx_16b peripheral. It requires 200MHz input clock (FCLK_CLK2 in exemplary project)
+#. axi_vdma - dma controller for video data. It is connected to main AXI bus as a slave and to secondary as master. 
+#. axi_hdmi_tx_16b - video signals generator for ADV7513 chip. It generates video synchronization signals (HSYNC and VSYNC), pixel clock and delivers video data. It is connected to main AXI bus and requires reference clock with proper frequency for chosen resolution. Video data is transferred to this peripheral with DMA. 
+#. axi_spdif_tx - digital audio signal generator. For correct work it is required to deliver 12.288135 MHz clock signal to this component. It is connected to main AXI bus and audio data is delivered using DMA. 
+
+To provide proper clock signal to spdif peripheral Xilinx clock generator IP core can be used.
 
 Epiphany link
 +++++++++++++
