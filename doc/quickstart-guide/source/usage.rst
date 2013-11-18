@@ -121,13 +121,15 @@ To re-flash the Parallella board using the official U-Boot follow these steps:
 
      ::
 
-        mmc info 
+        mmcinfo 
 
    * Load the Zynq boot image from the first partition (FAT-formatted) into RAM (make sure the image file is present on the SD card)
      
      ::
 
-        fatload mmc 0 <boot_image_name> 0x4000000 
+        fatload mmc 0 0x4000000 <boot_image_name> 
+
+     .. warning:: Be careful about the fatload address; if an address outside RAM is given (e.g. 0x40000000 instead of 0x4000000), the command will hang without a warning.
 
    * Initialize the SPI flash subsystem 
 
@@ -140,12 +142,16 @@ To re-flash the Parallella board using the official U-Boot follow these steps:
      ::
 
         sf erase 0 0x1000000 
+
+     .. note:: This process can take a long time to complete, do not interrupt it.
    
    * Program the flash memory 
 
      ::
 
-        sf write 0x4000000 0 <boot_image_length> 
+        sf write 0x4000000 0 0x$filesize 
+     
+     .. note:: The $filesize variable holds the size of the previously loaded file, so if you had loaded some other file in U-Boot in the meantime, this will not be the size you want and you have to provide the right value by hand.
 
 #. Power cycle the board.
 
